@@ -11,24 +11,25 @@
 
 ;;; Code:
 
-(require 'server)
-(unless (or (server-running-p) (daemonp))
-  (server-start))
-
+;; Packages
 (require 'package)
 (add-to-list 'package-archives
 	         '("melpa" . "https://melpa.org/packages/") t)
 
 ;; Keep the installed packages in .emacs.d
 (setq package-user-dir (expand-file-name "elpa" user-emacs-directory))
-(when (< emacs-major-version 27)
-  (package-initialize))
 
 ;; Update the package metadata
 ;; NOTE: This significantly slows Emacs startup.
 ;; If we use ensure for the installed packages, this is not needed.
-;; (unless package-archive-contents
-;;   (package-refresh-contents))
+(package-initialize)
+(unless package-archive-contents
+  (package-refresh-contents))
+
+;; Start emacs server
+(require 'server)
+(unless (or (server-running-p) (daemonp))
+  (server-start))
 
 ;; Username and Email
 (setq user-full-name "Mihai-Gabriel Marin"
@@ -151,17 +152,13 @@
 
 ;; Packages
 (use-package magit)
-(use-package clojure-mode)
-(use-package cider) ;; repl integration for clojure
-(use-package erlang)
-(use-package elixir-mode)
+(use-package company)
 (use-package go-mode)
 (use-package typescript-mode)
 (use-package markdown-mode)
 (use-package yaml-mode)
 (use-package protobuf-mode)
 (use-package wgrep)
-(use-package company)
 
 (use-package bash-completion
   :config
@@ -183,8 +180,13 @@
 
 (use-package elfeed
   :config
-  (setq elfeed-feeds '(("https://stallman.org/rss/rss.xml" GNU)))
-  )
+  (setq elfeed-feeds '(("https://stallman.org/rss/rss.xml" GNU Stallman)
+                       ("https://protesilaos.com/master.xml" GNU Emacs Protesilaos))))
+
+(use-package pdf-tools
+  :mode ("\\.pdf\\'" . pdf-view-mode) ;; Only load when opening a PDF
+  :config
+  (pdf-tools-install))
 
 ;; config changes made through the customize UI will be stored here
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))

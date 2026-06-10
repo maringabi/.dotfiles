@@ -9,7 +9,7 @@
 PS1='[\u@\h \W]\$ '
 
 # vi mode
-set -o vi
+# set -o vi
 
 # History
 # don't put duplicate lines or lines starting with space in the history.
@@ -75,4 +75,4 @@ export PATH="$PATH:$HOME/.cargo/bin"
 export PATH="$GOPATH/bin:$PATH"
 
 # Add fzf to bash
-[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+# [ -f ~/.fzf.bash ] && source ~/.fzf.bash
